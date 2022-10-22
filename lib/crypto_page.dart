@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:mecrypt/deposit_page.dart';
 
 import 'package:mecrypt/service.dart';
 
@@ -28,30 +27,6 @@ class CryptoPage extends StatefulWidget {
 }
 
 class _CryptoPageState extends State<CryptoPage> {
-  final String summariesUrl = "https://indodax.com/api/summaries";
-
-  Future<dynamic> _tickerDataCrypto() async {
-    var response = await http.get(Uri.parse(summariesUrl));
-    return json.decode(response.body)["tickers"][widget.tickerid];
-  }
-
-  Future<dynamic> _price24hrDataCrypto() async {
-    var response = await http.get(Uri.parse(summariesUrl));
-    return json.decode(response.body)["prices_24h"][widget.id];
-  }
-
-  Future<dynamic> _price7dDataCrypto() async {
-    var response = await http.get(Uri.parse(summariesUrl));
-    return json.decode(response.body)["prices_7d"][widget.id];
-  }
-
-  Future<List<dynamic>> _tradesDataCrypto() async {
-    final String tradesUrl =
-        "https://indodax.com/api/${widget.tickerid}/trades";
-    var response = await http.get(Uri.parse(tradesUrl));
-    return json.decode(response.body);
-  }
-
   Color? warna24jam = Warna.font;
   Color? warna7hari = Warna.font;
   Color? warnaTeks7hari = Warna.background;
@@ -130,29 +105,31 @@ class _CryptoPageState extends State<CryptoPage> {
               ),
             ),
             FutureBuilder<dynamic>(
-              future: _price24hrDataCrypto(),
+              future: FutureJson().price24hrDataCrypto(widget.id),
               builder: (BuildContext context, AsyncSnapshot snapshot24hr) {
                 if (snapshot24hr.hasData) {
                   return FutureBuilder<dynamic>(
-                    future: _tickerDataCrypto(),
+                    future: FutureJson().tickerDataCrypto(),
                     builder:
                         (BuildContext context, AsyncSnapshot snapshotTicker) {
                       if (snapshotTicker.hasData) {
                         return FutureBuilder<dynamic>(
-                          future: _price7dDataCrypto(),
+                          future: FutureJson().price7dDataCrypto(widget.id),
                           builder:
                               (BuildContext context, AsyncSnapshot snapshot7d) {
                             if (snapshot7d.hasData) {
+                              dynamic dataTicker =
+                                  snapshotTicker.data[widget.tickerid];
                               double persen24hr =
                                   (int.parse(snapshot24hr.data) -
                                           int.parse(
-                                            snapshotTicker.data["last"],
+                                            dataTicker["last"],
                                           )) /
                                       int.parse(snapshot24hr.data) *
                                       -100;
                               double persen7d = (int.parse(snapshot7d.data) -
                                       int.parse(
-                                        snapshotTicker.data["last"],
+                                        dataTicker["last"],
                                       )) /
                                   int.parse(snapshot7d.data) *
                                   -100;
@@ -186,8 +163,8 @@ class _CryptoPageState extends State<CryptoPage> {
                                               children: [
                                                 Text(
                                                   CurrencyFormat.convertToIdr(
-                                                      int.parse(snapshotTicker
-                                                          .data["last"])),
+                                                      int.parse(
+                                                          dataTicker["last"])),
                                                   style: GoogleFonts.jua(
                                                       fontSize: 25,
                                                       color: Warna.card,
@@ -224,9 +201,11 @@ class _CryptoPageState extends State<CryptoPage> {
                                                                 int.parse(
                                                                     snapshot24hr
                                                                         .data)),
-                                                            style: GoogleFonts.jua(
-                                                                color: Warna
-                                                                    .card, fontSize: 18,),
+                                                            style:
+                                                                GoogleFonts.jua(
+                                                              color: Warna.card,
+                                                              fontSize: 18,
+                                                            ),
                                                           ),
                                                         ],
                                                       ),
@@ -256,8 +235,8 @@ class _CryptoPageState extends State<CryptoPage> {
                                                                             .data)),
                                                             style:
                                                                 GoogleFonts.jua(
-                                                              color: Warna
-                                                                  .card, fontSize: 18,
+                                                              color: Warna.card,
+                                                              fontSize: 18,
                                                             ),
                                                           ),
                                                         ],
@@ -386,7 +365,8 @@ class _CryptoPageState extends State<CryptoPage> {
                                   const SizedBox(height: 20),
                                   Expanded(
                                     child: FutureBuilder<List<dynamic>>(
-                                      future: _tradesDataCrypto(),
+                                      future: FutureJson()
+                                          .tradesDataCrypto(widget.tickerid),
                                       builder: (BuildContext context,
                                           AsyncSnapshot snapshot) {
                                         if (snapshot.hasData) {
@@ -497,10 +477,7 @@ class _CryptoPageState extends State<CryptoPage> {
                                             ],
                                           );
                                         } else {
-                                          return const Align(
-                                              alignment: Alignment.center,
-                                              child:
-                                                  CircularProgressIndicator());
+                                          return Container();
                                         }
                                       },
                                     ),
@@ -527,7 +504,21 @@ class _CryptoPageState extends State<CryptoPage> {
                                                   BorderRadius.circular(10),
                                             ),
                                             color: Warna.background,
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      DepositPage(
+                                                    title:
+                                                        "Pembelian ${widget.name}",
+                                                    hargaCrypto:
+                                                        dataTicker["last"],
+                                                    namaIDR: widget.namaIDR,
+                                                  ),
+                                                ),
+                                              );
+                                            },
                                             child: Text(
                                               "BELI",
                                               style:

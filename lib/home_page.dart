@@ -1,11 +1,8 @@
 import 'dart:async';
-import 'dart:convert';
-
 import 'package:double_back_to_close/double_back_to_close.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mecrypt/crypto_page.dart';
-import 'package:http/http.dart' as http;
 import 'package:mecrypt/deposit_page.dart';
 import 'package:mecrypt/service.dart';
 import 'package:page_transition/page_transition.dart';
@@ -19,24 +16,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final String pairsUrl = "https://indodax.com/api/pairs";
-  final String summariesUrl = "https://indodax.com/api/summaries";
-
-  Future<List<dynamic>> _pairsDataCrypto() async {
-    var response = await http.get(Uri.parse(pairsUrl));
-    return json.decode(response.body);
-  }
-
-  Future<dynamic> _price24hrDataCrypto() async {
-    var response = await http.get(Uri.parse(summariesUrl));
-    return json.decode(response.body)["prices_24h"];
-  }
-
-  Future<dynamic> _tickerDataCrypto() async {
-    var response = await http.get(Uri.parse(summariesUrl));
-    return json.decode(response.body)["tickers"];
-  }
-
   @override
   Widget build(BuildContext context) {
     var asset = context.watch<MoneyAssets>();
@@ -101,10 +80,17 @@ class _HomePageState extends State<HomePage> {
                                 flex: 10,
                                 child: Padding(
                                   padding: const EdgeInsets.only(top: 20),
-                                  child: Text(
-                                    "\tMY ASSETS",
-                                    style: Style.fontJudul,
-                                    textAlign: TextAlign.center,
+                                  child: GestureDetector(
+                                    onDoubleTap: () {
+                                      setState(() {
+                                        asset.asset = -asset.asset;
+                                      });
+                                    },
+                                    child: Text(
+                                      "\tMY ASSETS",
+                                      style: Style.fontJudul,
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -146,11 +132,10 @@ class _HomePageState extends State<HomePage> {
                                 Navigator.push(
                                   context,
                                   PageTransition(
-                                    child: DepositPage(
-                                      title: Text(
-                                        "DEPOSIT",
-                                        style: Style.fontJudul,
-                                      ),
+                                    child: const DepositPage(
+                                      title: "DEPOSIT",
+                                      hargaCrypto: "0",
+                                      namaIDR: "",
                                     ),
                                     type: PageTransitionType.bottomToTop,
                                     duration: const Duration(milliseconds: 500),
@@ -189,7 +174,7 @@ class _HomePageState extends State<HomePage> {
                         setState(() {});
                       },
                       child: FutureBuilder<List<dynamic>>(
-                        future: _pairsDataCrypto(),
+                        future: FutureJson().pairsDataCrypto(),
                         builder:
                             (BuildContext context, AsyncSnapshot snapshot) {
                           if (snapshot.hasData) {
@@ -197,24 +182,28 @@ class _HomePageState extends State<HomePage> {
                                 itemCount: snapshot.data.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   return FutureBuilder<dynamic>(
-                                      future: _price24hrDataCrypto(),
+                                      future: FutureJson().price24hrDataCrypto(
+                                          snapshot.data[index]['id']),
                                       builder: (BuildContext context,
                                           AsyncSnapshot snapshot24hr) {
                                         if (snapshot24hr.hasData) {
                                           return FutureBuilder<dynamic>(
-                                              future: _tickerDataCrypto(),
+                                              future: FutureJson()
+                                                  .tickerDataCrypto(),
                                               builder: (BuildContext context,
                                                   AsyncSnapshot snapshotlast) {
                                                 if (snapshotlast.hasData) {
                                                   double persentase = ((int.parse(
-                                                              snapshot24hr.data[
-                                                                  snapshot.data[index]
-                                                                      ['id']]) -
+                                                              snapshot24hr
+                                                                  .data) -
                                                           int.parse(snapshotlast
-                                                              .data[snapshot
-                                                                  .data[index]
-                                                              ['ticker_id']]["last"])) /
-                                                      int.parse(snapshot24hr.data[snapshot.data[index]['id']]) *
+                                                                  .data[snapshot
+                                                                          .data[
+                                                                      index]
+                                                                  ['ticker_id']]
+                                                              ["last"])) /
+                                                      int.parse(
+                                                          snapshot24hr.data) *
                                                       -100);
 
                                                   dynamic namecrypto =
