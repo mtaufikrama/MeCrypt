@@ -24,6 +24,10 @@ class _SplashScreenState extends State<SplashScreen> {
         );
       },
     );
+    Timer(
+      const Duration(seconds: 5),
+      () {},
+    );
   }
 
   @override

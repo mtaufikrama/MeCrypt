@@ -77,32 +77,12 @@ class _CryptoPageState extends State<CryptoPage> {
               color: Warna.font,
             ),
           ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                setState(() {});
-              },
-              icon: Icon(
-                Icons.refresh,
-                color: Warna.font,
-              ),
-            ),
-          ],
           backgroundColor: Colors.black,
         ),
         body: Stack(
           children: [
             Container(
               color: Colors.black,
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 223),
-              decoration: BoxDecoration(
-                color: Warna.background,
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(30),
-                ),
-              ),
             ),
             FutureBuilder<dynamic>(
               future: FutureJson().price24hrDataCrypto(widget.id),
@@ -362,7 +342,7 @@ class _CryptoPageState extends State<CryptoPage> {
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(height: 20),
+                                  const SizedBox(height: 10),
                                   Expanded(
                                     child: FutureBuilder<List<dynamic>>(
                                       future: FutureJson()
@@ -370,111 +350,127 @@ class _CryptoPageState extends State<CryptoPage> {
                                       builder: (BuildContext context,
                                           AsyncSnapshot snapshot) {
                                         if (snapshot.hasData) {
-                                          return Column(
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 20),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                      "HARGA",
-                                                      style: GoogleFonts.jua(
-                                                        color: Warna.font,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      "TRADES",
-                                                      style: Style.fontJudul,
-                                                    ),
-                                                    Text(
-                                                      "JUMLAH",
-                                                      style: GoogleFonts.jua(
-                                                        color: Warna.font,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                  ],
+                                          return Container(
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    const BorderRadius.vertical(
+                                                  top: Radius.circular(20),
                                                 ),
-                                              ),
-                                              const SizedBox(
-                                                height: 10,
-                                              ),
-                                              Expanded(
-                                                child: ListView.builder(
-                                                  itemCount:
-                                                      snapshot.data.length,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    String harga =
-                                                        CurrencyFormat
-                                                            .convertToIdr(
-                                                      int.parse(
-                                                        snapshot.data[index]
-                                                            ["price"],
+                                                color: Warna.background),
+                                            child: Column(
+                                              children: [
+                                                SizedBox(height: 10),
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 20),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        "HARGA",
+                                                        style: GoogleFonts.jua(
+                                                          color: Warna.font,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
                                                       ),
-                                                    );
-                                                    String jumlah = snapshot
-                                                        .data[index]["amount"];
-                                                    dynamic type = snapshot
-                                                        .data[index]["type"];
-                                                    return Container(
-                                                      height: 40,
-                                                      margin: const EdgeInsets
-                                                              .symmetric(
-                                                          vertical: 1,
-                                                          horizontal: 5),
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          horizontal: 10),
-                                                      decoration: BoxDecoration(
-                                                        color: type == "buy"
-                                                            ? Warna.naik
-                                                            : Warna.turun,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
+                                                      Text(
+                                                        "TRADES",
+                                                        style: Style.fontJudul,
                                                       ),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Text(
-                                                            "$harga/${widget.namaIDR}",
-                                                            style:
-                                                                GoogleFonts.jua(
-                                                              color: type ==
-                                                                      "buy"
-                                                                  ? Colors.black
-                                                                  : Warna.font,
-                                                            ),
-                                                          ),
-                                                          Text(
-                                                            "$jumlah ${widget.namaIDR}",
-                                                            style:
-                                                                GoogleFonts.jua(
-                                                              color: type ==
-                                                                      "buy"
-                                                                  ? Colors.black
-                                                                  : Warna.font,
-                                                            ),
-                                                          ),
-                                                        ],
+                                                      Text(
+                                                        "JUMLAH",
+                                                        style: GoogleFonts.jua(
+                                                          color: Warna.font,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
                                                       ),
-                                                    );
-                                                  },
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Expanded(
+                                                  child: ListView.builder(
+                                                    itemCount:
+                                                        snapshot.data.length,
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            int index) {
+                                                      String harga =
+                                                          CurrencyFormat
+                                                              .convertToIdr(
+                                                        int.parse(
+                                                          snapshot.data[index]
+                                                              ["price"],
+                                                        ),
+                                                      );
+                                                      String jumlah =
+                                                          snapshot.data[index]
+                                                              ["amount"];
+                                                      dynamic type = snapshot
+                                                          .data[index]["type"];
+                                                      return Container(
+                                                        height: 40,
+                                                        margin: const EdgeInsets
+                                                                .symmetric(
+                                                            vertical: 1,
+                                                            horizontal: 5),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                horizontal: 10),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: type == "buy"
+                                                              ? Warna.naik
+                                                              : Warna.turun,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                        ),
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                              "$harga/${widget.namaIDR}",
+                                                              style: GoogleFonts
+                                                                  .jua(
+                                                                color: type ==
+                                                                        "buy"
+                                                                    ? Colors
+                                                                        .black
+                                                                    : Warna
+                                                                        .font,
+                                                              ),
+                                                            ),
+                                                            Text(
+                                                              "$jumlah ${widget.namaIDR}",
+                                                              style: GoogleFonts
+                                                                  .jua(
+                                                                color: type ==
+                                                                        "buy"
+                                                                    ? Colors
+                                                                        .black
+                                                                    : Warna
+                                                                        .font,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           );
                                         } else {
                                           return Container();
