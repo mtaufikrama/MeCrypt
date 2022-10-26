@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mecrypt/service.dart';
 import 'package:mecrypt/splash_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   runApp(
     MultiProvider(
       providers: [
@@ -11,10 +17,10 @@ void main() {
           create: (context) => MoneyAssets(),
         ),
       ],
-      child: MaterialApp(
+      child: const MaterialApp(
         debugShowCheckedModeBanner: false,
         title: "Crypto Currency",
-        home: const SplashScreen(),
+        home: SplashScreen(),
       ),
     ),
   );

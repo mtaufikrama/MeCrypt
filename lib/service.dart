@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
@@ -13,27 +11,6 @@ class CurrencyFormat {
       symbol: 'Rp ',
       decimalDigits: 0,
     ).format(number);
-  }
-}
-
-class CurrencyPtBrInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    if (newValue.selection.baseOffset == 0) {
-      return newValue;
-    }
-
-    double value = double.parse(newValue.text);
-    String newText = NumberFormat.currency(
-      locale: 'id',
-      symbol: "",
-      decimalDigits: 0,
-    ).format(value);
-
-    return newValue.copyWith(
-        text: newText,
-        selection: TextSelection.collapsed(offset: newText.length));
   }
 }
 
@@ -70,10 +47,17 @@ List<List<String>> listBank = [
 
 class MoneyAssets with ChangeNotifier {
   int _asset = 0;
+  final List<dynamic> _listCrypto = [];
 
   int get asset => _asset;
   set asset(int value) {
     _asset = _asset + value;
+    notifyListeners();
+  }
+
+  List<dynamic> get listCrypto => _listCrypto;
+  set listCrypto(dynamic index) {
+    _listCrypto.add(index);
     notifyListeners();
   }
 

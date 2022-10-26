@@ -101,17 +101,17 @@ class _CryptoPageState extends State<CryptoPage> {
                               dynamic dataTicker =
                                   snapshotTicker.data[widget.tickerid];
                               double persen24hr =
-                                  (int.parse(snapshot24hr.data) -
-                                          int.parse(
+                                  (double.parse(snapshot24hr.data) -
+                                          double.parse(
                                             dataTicker["last"],
                                           )) /
-                                      int.parse(snapshot24hr.data) *
+                                      double.parse(snapshot24hr.data) *
                                       -100;
-                              double persen7d = (int.parse(snapshot7d.data) -
-                                      int.parse(
+                              double persen7d = (double.parse(snapshot7d.data) -
+                                      double.parse(
                                         dataTicker["last"],
                                       )) /
-                                  int.parse(snapshot7d.data) *
+                                  double.parse(snapshot7d.data) *
                                   -100;
                               return Column(
                                 children: [
@@ -143,7 +143,7 @@ class _CryptoPageState extends State<CryptoPage> {
                                               children: [
                                                 Text(
                                                   CurrencyFormat.convertToIdr(
-                                                      int.parse(
+                                                      double.parse(
                                                           dataTicker["last"])),
                                                   style: GoogleFonts.jua(
                                                       fontSize: 25,
@@ -178,7 +178,7 @@ class _CryptoPageState extends State<CryptoPage> {
                                                           ),
                                                           Text(
                                                             CurrencyFormat.convertToIdr(
-                                                                int.parse(
+                                                                double.parse(
                                                                     snapshot24hr
                                                                         .data)),
                                                             style:
@@ -210,7 +210,7 @@ class _CryptoPageState extends State<CryptoPage> {
                                                           Text(
                                                             CurrencyFormat
                                                                 .convertToIdr(
-                                                                    int.parse(
+                                                                    double.parse(
                                                                         snapshot7d
                                                                             .data)),
                                                             style:
@@ -405,7 +405,7 @@ class _CryptoPageState extends State<CryptoPage> {
                                                       String harga =
                                                           CurrencyFormat
                                                               .convertToIdr(
-                                                        int.parse(
+                                                        double.parse(
                                                           snapshot.data[index]
                                                               ["price"],
                                                         ),

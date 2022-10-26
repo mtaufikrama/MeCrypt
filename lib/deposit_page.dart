@@ -1,7 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:form_validator/form_validator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mecrypt/service.dart';
 import 'package:provider/provider.dart';
@@ -96,10 +95,14 @@ class _DepositPageState extends State<DepositPage> {
                                           child: TextFormField(
                                             autofocus: true,
                                             controller: depoController,
+                                            cursorHeight: 22,
+                                            cursorColor: Colors.black,
                                             style: GoogleFonts.jua(
                                               color: Warna.background,
                                               fontSize: 20,
                                             ),
+                                            decoration: const InputDecoration(
+                                                hintText: "XXXXX"),
                                             inputFormatters: [
                                               FilteringTextInputFormatter
                                                   .digitsOnly,
@@ -249,6 +252,7 @@ class _DepositPageState extends State<DepositPage> {
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 1),
                                   child: Card(
+                                    color: Warna.font,
                                     margin: const EdgeInsets.symmetric(
                                         vertical: 1, horizontal: 5),
                                     shape: RoundedRectangleBorder(
