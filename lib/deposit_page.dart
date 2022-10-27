@@ -11,6 +11,7 @@ class DepositPage extends StatefulWidget {
   final String namaIDR;
   final String nama;
   final String logoCrypto;
+  final String tickerIDCrypto;
   const DepositPage({
     Key? key,
     required this.title,
@@ -18,6 +19,7 @@ class DepositPage extends StatefulWidget {
     required this.namaIDR,
     required this.nama,
     required this.logoCrypto,
+    required this.tickerIDCrypto,
   }) : super(key: key);
 
   @override
@@ -235,6 +237,7 @@ class _DepositPageState extends State<DepositPage> {
                                         assetList.add(widget.hargaCrypto);
                                         assetList.add(widget.nama);
                                         assetList.add(widget.logoCrypto);
+                                        assetList.add(widget.tickerIDCrypto);
                                         print(
                                             "assetList : ${assetList.toString()}");
                                         asset.listAssets.add(assetList);

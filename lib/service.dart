@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
 class CurrencyFormat {
-  static String convertToIdr(dynamic number) {
+  static String convertToIdr(num number) {
     return NumberFormat.currency(
       locale: 'id',
       symbol: 'Rp ',

@@ -11,6 +11,7 @@ class CryptoPage extends StatefulWidget {
   final String deskripsi;
   final String name;
   final String image;
+  final String tickerIDCrypto;
 
   const CryptoPage({
     Key? key,
@@ -20,6 +21,7 @@ class CryptoPage extends StatefulWidget {
     required this.deskripsi,
     required this.name,
     required this.image,
+    required this.tickerIDCrypto,
   }) : super(key: key);
 
   @override
@@ -513,6 +515,8 @@ class _CryptoPageState extends State<CryptoPage> {
                                                     namaIDR: widget.namaIDR,
                                                     nama: widget.name,
                                                     logoCrypto: widget.image,
+                                                    tickerIDCrypto:
+                                                        widget.tickerIDCrypto,
                                                   ),
                                                 ),
                                               );
