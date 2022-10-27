@@ -9,11 +9,15 @@ class DepositPage extends StatefulWidget {
   final String title;
   final String hargaCrypto;
   final String namaIDR;
+  final String nama;
+  final String logoCrypto;
   const DepositPage({
     Key? key,
     required this.title,
     required this.hargaCrypto,
     required this.namaIDR,
+    required this.nama,
+    required this.logoCrypto,
   }) : super(key: key);
 
   @override
@@ -223,7 +227,19 @@ class _DepositPageState extends State<DepositPage> {
                                       ).show();
                                     } else if (hargaUpdate < asset.asset) {
                                       setState(() {
+                                        List<dynamic> assetList = [];
                                         asset.asset = -hargaUpdate;
+                                        assetList.add(hargaUpdate.toString());
+                                        assetList.add(
+                                            "${counter.toString()} ${widget.namaIDR}");
+                                        assetList.add(widget.hargaCrypto);
+                                        assetList.add(widget.nama);
+                                        assetList.add(widget.logoCrypto);
+                                        print(
+                                            "assetList : ${assetList.toString()}");
+                                        asset.listAssets.add(assetList);
+                                        print(
+                                            "listAssets : ${asset.listAssets.toString()}");
                                       });
                                       AwesomeDialog(
                                         context: context,

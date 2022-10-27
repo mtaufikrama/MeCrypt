@@ -6,14 +6,14 @@ import 'package:provider/provider.dart';
 
 import 'crypto_page.dart';
 
-class AssetPage extends StatefulWidget {
-  const AssetPage({super.key});
+class FavouritePage extends StatefulWidget {
+  const FavouritePage({super.key});
 
   @override
-  State<AssetPage> createState() => _AssetPageState();
+  State<FavouritePage> createState() => _FavouritePageState();
 }
 
-class _AssetPageState extends State<AssetPage> {
+class _FavouritePageState extends State<FavouritePage> {
   @override
   Widget build(BuildContext context) {
     var asset = context.watch<MoneyAssets>();

@@ -19,7 +19,7 @@ void main() {
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: "Crypto Currency",
+        title: "MeCrypt",
         home: SplashScreen(),
       ),
     ),

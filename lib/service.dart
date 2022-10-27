@@ -48,6 +48,7 @@ List<List<String>> listBank = [
 class MoneyAssets with ChangeNotifier {
   int _asset = 0;
   final List<dynamic> _listCrypto = [];
+  final List<List<dynamic>> _listAssets = [];
 
   int get asset => _asset;
   set asset(int value) {
@@ -58,6 +59,11 @@ class MoneyAssets with ChangeNotifier {
   List<dynamic> get listCrypto => _listCrypto;
   set listCrypto(dynamic index) {
     _listCrypto.add(index);
+    notifyListeners();
+  }
+  List<List<dynamic>> get listAssets => _listAssets;
+  set listAssets(List<dynamic> listIndex) {
+    _listAssets.add(listIndex);
     notifyListeners();
   }
 

@@ -359,7 +359,7 @@ class _CryptoPageState extends State<CryptoPage> {
                                                 color: Warna.background),
                                             child: Column(
                                               children: [
-                                                SizedBox(height: 10),
+                                                const SizedBox(height: 10),
                                                 Padding(
                                                   padding: const EdgeInsets
                                                           .symmetric(
@@ -511,6 +511,8 @@ class _CryptoPageState extends State<CryptoPage> {
                                                     hargaCrypto:
                                                         dataTicker["last"],
                                                     namaIDR: widget.namaIDR,
+                                                    nama: widget.name,
+                                                    logoCrypto: widget.image,
                                                   ),
                                                 ),
                                               );

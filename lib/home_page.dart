@@ -5,12 +5,14 @@ import 'package:double_back_to_close/double_back_to_close.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:mecrypt/asset.dart';
 import 'package:mecrypt/crypto_page.dart';
 import 'package:mecrypt/deposit_page.dart';
+import 'package:mecrypt/favourite_page.dart';
 import 'package:mecrypt/service.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+
+import 'asset_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -115,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              const AssetPage(),
+                                              const FavouritePage(),
                                         ),
                                       );
                                     },
@@ -144,11 +146,21 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                         ),
-                        Text(
-                          asset.assetRp,
-                          style: GoogleFonts.jua(
-                            fontSize: 25,
-                            color: Colors.white,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AssetPage(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            asset.assetRp,
+                            style: GoogleFonts.jua(
+                              fontSize: 25,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                         Padding(
@@ -171,6 +183,8 @@ class _HomePageState extends State<HomePage> {
                                       title: "DEPOSIT",
                                       hargaCrypto: "0",
                                       namaIDR: "",
+                                      nama: "",
+                                      logoCrypto: "",
                                     ),
                                     type: PageTransitionType.bottomToTop,
                                     duration: const Duration(milliseconds: 500),
