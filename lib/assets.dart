@@ -47,8 +47,8 @@ class _AssetsState extends State<Assets> {
                                 ? Colors.grey
                                 : Warna.naik,
                         title:
-                            "${CurrencyFormat.convertToIdr(int.parse(assetsList[hargaCryptoAssets]))} → ${CurrencyFormat.convertToIdr(double.parse(assetsList[hargaCryptoAssets]) + (double.parse(assetsList[hargaCryptoAssets]) * persentase / 100))}",
-                        subtitle: assetsList[jumlahCryptoAssets],
+                            assetsList[namaCrypto],
+                        subtitle: "${CurrencyFormat.convertToIdr(int.parse(assetsList[hargaCryptoAssets]))}/${assetsList[jumlahCryptoAssets]}",
                         kananTengah: persentase > 0
                             ? "+ ${persentase.toStringAsFixed(2)}%"
                             : persentase == 0

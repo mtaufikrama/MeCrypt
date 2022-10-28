@@ -63,6 +63,7 @@ class ListCard extends StatelessWidget {
                             Text(
                               subtitle,
                               style: Style.fontAngka,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ],
                         ),

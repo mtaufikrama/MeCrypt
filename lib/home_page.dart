@@ -326,11 +326,6 @@ class _HomePageState extends State<HomePage> {
                                                                           () {
                                                                         asset.listCrypto =
                                                                             index;
-                                                                        print(
-                                                                            index);
-                                                                        print(asset
-                                                                            .listCrypto
-                                                                            .toString());
                                                                       },
                                                                       color: persentase <
                                                                               0.0
