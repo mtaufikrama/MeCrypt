@@ -87,7 +87,7 @@ class _CryptoPageState extends State<CryptoPage> {
               color: Colors.black,
             ),
             FutureBuilder<dynamic>(
-              future: FutureJson().price24hrDataCrypto(widget.id),
+              future: FutureJson().price24hrDataCrypto(),
               builder: (BuildContext context, AsyncSnapshot snapshot24hr) {
                 if (snapshot24hr.hasData) {
                   return FutureBuilder<dynamic>(
@@ -96,24 +96,24 @@ class _CryptoPageState extends State<CryptoPage> {
                         (BuildContext context, AsyncSnapshot snapshotTicker) {
                       if (snapshotTicker.hasData) {
                         return FutureBuilder<dynamic>(
-                          future: FutureJson().price7dDataCrypto(widget.id),
+                          future: FutureJson().price7dDataCrypto(),
                           builder:
                               (BuildContext context, AsyncSnapshot snapshot7d) {
                             if (snapshot7d.hasData) {
                               dynamic dataTicker =
                                   snapshotTicker.data[widget.tickerid];
                               double persen24hr =
-                                  (double.parse(snapshot24hr.data) -
+                                  (double.parse(snapshot24hr.data[widget.id]) -
                                           double.parse(
                                             dataTicker["last"],
                                           )) /
-                                      double.parse(snapshot24hr.data) *
+                                      double.parse(snapshot24hr.data[widget.id]) *
                                       -100;
-                              double persen7d = (double.parse(snapshot7d.data) -
+                              double persen7d = (double.parse(snapshot7d.data[widget.id]) -
                                       double.parse(
                                         dataTicker["last"],
                                       )) /
-                                  double.parse(snapshot7d.data) *
+                                  double.parse(snapshot7d.data[widget.id]) *
                                   -100;
                               return Column(
                                 children: [
@@ -182,7 +182,7 @@ class _CryptoPageState extends State<CryptoPage> {
                                                             CurrencyFormat.convertToIdr(
                                                                 double.parse(
                                                                     snapshot24hr
-                                                                        .data)),
+                                                                        .data[widget.id])),
                                                             style:
                                                                 GoogleFonts.jua(
                                                               color: Warna.card,
@@ -214,7 +214,7 @@ class _CryptoPageState extends State<CryptoPage> {
                                                                 .convertToIdr(
                                                                     double.parse(
                                                                         snapshot7d
-                                                                            .data)),
+                                                                            .data[widget.id])),
                                                             style:
                                                                 GoogleFonts.jua(
                                                               color: Warna.card,

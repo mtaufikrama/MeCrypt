@@ -24,13 +24,25 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String? timeString;
+  Future<dynamic>? futureTicker;
+  Future<dynamic>? future24hr;
+  Future<List<dynamic>>? futurePairs;
+
+  void freeze() {
+    timeString = DateFormat.jm().format(DateTime.now());
+    futurePairs = FutureJson().pairsDataCrypto();
+    futureTicker = FutureJson().tickerDataCrypto();
+    future24hr = FutureJson().price24hrDataCrypto();
+  }
 
   @override
   void initState() {
     timeString = DateFormat.jm().format(DateTime.now());
+    futurePairs = FutureJson().pairsDataCrypto();
+    futureTicker = FutureJson().tickerDataCrypto();
     Timer.periodic(const Duration(seconds: 20), (timer) {
       setState(() {
-        timeString = DateFormat.jm().format(DateTime.now());
+        freeze();
       });
     });
     super.initState();
@@ -210,7 +222,7 @@ class _HomePageState extends State<HomePage> {
                               child: TabBarView(
                                 children: [
                                   FutureBuilder<List<dynamic>>(
-                                    future: FutureJson().pairsDataCrypto(),
+                                    future: futurePairs,
                                     builder: (BuildContext context,
                                         AsyncSnapshot snapshot) {
                                       if (snapshot.hasData) {
@@ -223,10 +235,7 @@ class _HomePageState extends State<HomePage> {
                                                     (BuildContext context,
                                                         int index) {
                                                   return FutureBuilder<dynamic>(
-                                                    future: FutureJson()
-                                                        .price24hrDataCrypto(
-                                                            snapshot.data[index]
-                                                                ['id']),
+                                                    future: future24hr,
                                                     builder:
                                                         (BuildContext context,
                                                             AsyncSnapshot
@@ -235,8 +244,7 @@ class _HomePageState extends State<HomePage> {
                                                           .hasData) {
                                                         return FutureBuilder<
                                                             dynamic>(
-                                                          future: FutureJson()
-                                                              .tickerDataCrypto(),
+                                                          future: futureTicker,
                                                           builder: (BuildContext
                                                                   context,
                                                               AsyncSnapshot
@@ -286,16 +294,15 @@ class _HomePageState extends State<HomePage> {
                                                                           index]
                                                                       [
                                                                       "description"];
-                                                              double persentase = ((double.parse(
-                                                                          snapshot24hr
-                                                                              .data) -
+                                                              double persentase = ((double.parse(snapshot24hr.data[snapshot.data[index]['id']]) -
                                                                       double.parse(
-                                                                          snapshotlast.data[tickerID]
-                                                                              [
+                                                                          snapshotlast.data[tickerID][
                                                                               "last"])) /
-                                                                  double.parse(
-                                                                      snapshot24hr
-                                                                          .data) *
+                                                                  double.parse(snapshot24hr
+                                                                      .data[snapshot
+                                                                              .data[
+                                                                          index]
+                                                                      ['id']]) *
                                                                   -100);
 
                                                               return Column(

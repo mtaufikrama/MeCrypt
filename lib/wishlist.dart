@@ -20,12 +20,12 @@ class _WishListState extends State<WishList> {
   @override
   Widget build(BuildContext context) {
     var asset = context.watch<MoneyAssets>();
-    return FutureBuilder<List<dynamic>>(
-      future: FutureJson().pairsDataCrypto(),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.hasData) {
-          return asset.listCrypto.isNotEmpty
-              ? Column(
+    return asset.listCrypto.isNotEmpty
+        ? FutureBuilder<List<dynamic>>(
+            future: FutureJson().pairsDataCrypto(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                return Column(
                   children: [
                     ListView.builder(
                       shrinkWrap: true,
@@ -33,8 +33,7 @@ class _WishListState extends State<WishList> {
                       itemBuilder: (BuildContext context, int index) {
                         dynamic cryptoList = asset.listCrypto[index];
                         return FutureBuilder<dynamic>(
-                          future: FutureJson().price24hrDataCrypto(
-                              snapshot.data[cryptoList]['id']),
+                          future: FutureJson().price24hrDataCrypto(),
                           builder: (BuildContext context,
                               AsyncSnapshot snapshot24hr) {
                             if (snapshot24hr.hasData) {
@@ -44,11 +43,13 @@ class _WishListState extends State<WishList> {
                                     AsyncSnapshot snapshotlast) {
                                   if (snapshotlast.hasData) {
                                     double persentase = ((double.parse(
-                                                snapshot24hr.data) -
+                                                snapshot24hr.data[snapshot
+                                                    .data[cryptoList]['id']]) -
                                             double.parse(snapshotlast.data[
                                                 snapshot.data[cryptoList]
                                                     ['ticker_id']]["last"])) /
-                                        double.parse(snapshot24hr.data) *
+                                        double.parse(
+                                            snapshot24hr.data[snapshot.data[cryptoList]['id']]) *
                                         -100);
 
                                     dynamic namecrypto = snapshotlast.data[
@@ -131,20 +132,20 @@ class _WishListState extends State<WishList> {
                       },
                     ),
                   ],
-                )
-              : Center(
-                  child: Text(
-                    "NO DATA",
-                    style: GoogleFonts.jua(
-                      fontSize: 30,
-                      color: Warna.font,
-                    ),
-                  ),
                 );
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
-      },
-    );
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
+          )
+        : Center(
+            child: Text(
+              "NO DATA",
+              style: GoogleFonts.jua(
+                fontSize: 30,
+                color: Warna.font,
+              ),
+            ),
+          );
   }
 }

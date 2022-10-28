@@ -79,9 +79,9 @@ class FutureJson {
     return json.decode(response.body);
   }
 
-  Future<dynamic> price24hrDataCrypto(String id) async {
+  Future<dynamic> price24hrDataCrypto() async {
     var response = await http.get(Uri.parse(summariesUrl));
-    return json.decode(response.body)["prices_24h"][id];
+    return json.decode(response.body)["prices_24h"];
   }
 
   Future<dynamic> tickerDataCrypto() async {
@@ -95,8 +95,8 @@ class FutureJson {
     return json.decode(response.body);
   }
 
-  Future<dynamic> price7dDataCrypto(String id) async {
+  Future<dynamic> price7dDataCrypto() async {
     var response = await http.get(Uri.parse(summariesUrl));
-    return json.decode(response.body)["prices_7d"][id];
+    return json.decode(response.body)["prices_7d"];
   }
 }
