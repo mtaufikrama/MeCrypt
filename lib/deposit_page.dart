@@ -238,6 +238,7 @@ class _DepositPageState extends State<DepositPage> {
                                         assetList.add(widget.nama);
                                         assetList.add(widget.logoCrypto);
                                         assetList.add(widget.tickerIDCrypto);
+                                        asset.listAssets.add(assetList);
                                       });
                                       AwesomeDialog(
                                         context: context,
