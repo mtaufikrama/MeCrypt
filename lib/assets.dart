@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mecrypt/card.dart';
 import 'package:mecrypt/service.dart';
-import 'package:provider/provider.dart';
 
 class Assets extends StatefulWidget {
-  const Assets({super.key});
+  const Assets({
+    super.key,
+    required this.tickerDataCrypto,
+  });
+  final Future<dynamic> tickerDataCrypto;
 
   @override
   State<Assets> createState() => _AssetsState();
@@ -16,13 +19,13 @@ class Assets extends StatefulWidget {
 class _AssetsState extends State<Assets> {
   @override
   Widget build(BuildContext context) {
-    var asset = context.watch<MoneyAssets>();
-    return asset.listAssets.isNotEmpty
+    Map assets = Storages.getAssets;
+    return assets.isNotEmpty
         ? ListView.builder(
             shrinkWrap: true,
-            itemCount: asset.listAssets.length,
+            itemCount: assets.length,
             itemBuilder: (BuildContext context, int index) {
-              dynamic assetsList = asset.listAssets[index];
+              dynamic assetsList = assets[index];
               int hargaCryptoAssets = 0;
               int jumlahCryptoAssets = 1;
               int hargaCryptoToday = 2;
@@ -30,7 +33,7 @@ class _AssetsState extends State<Assets> {
               int logoCrypto = 4;
               int tickerIDCrypto = 5;
               return FutureBuilder<dynamic>(
-                  future: FutureJson().tickerDataCrypto(),
+                  future: widget.tickerDataCrypto,
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.hasData) {
                       var persentase =
@@ -46,9 +49,9 @@ class _AssetsState extends State<Assets> {
                             : persentase == 0.0
                                 ? Colors.grey
                                 : Warna.naik,
-                        title:
-                            assetsList[namaCrypto],
-                        subtitle: "${CurrencyFormat.convertToIdr(int.parse(assetsList[hargaCryptoAssets]))}/${assetsList[jumlahCryptoAssets]}",
+                        title: assetsList[namaCrypto],
+                        subtitle:
+                            "${CurrencyFormat.convertToIdr(int.parse(assetsList[hargaCryptoAssets]))}/${assetsList[jumlahCryptoAssets]}",
                         kananTengah: persentase > 0
                             ? "+ ${persentase.toStringAsFixed(2)}%"
                             : persentase == 0

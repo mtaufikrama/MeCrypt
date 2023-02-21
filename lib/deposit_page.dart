@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mecrypt/service.dart';
-import 'package:provider/provider.dart';
 
 class DepositPage extends StatefulWidget {
   final String title;
@@ -33,7 +32,7 @@ class _DepositPageState extends State<DepositPage> {
 
   @override
   Widget build(BuildContext context) {
-    var asset = context.watch<MoneyAssets>();
+    int dana = Storages.getDana;
     int hargaUpdate = int.parse(widget.hargaCrypto) * counter;
     return SafeArea(
       child: Scaffold(
@@ -70,7 +69,7 @@ class _DepositPageState extends State<DepositPage> {
                       children: [
                         Center(
                           child: Text(
-                            "MY ASSETS\n${asset.assetRp}",
+                            "MY ASSETS\n${CurrencyFormat.convertToIdr(dana)}",
                             textAlign: TextAlign.center,
                             style: Style.fontJudul,
                           ),
@@ -188,6 +187,7 @@ class _DepositPageState extends State<DepositPage> {
                         Expanded(
                           child: ListView.builder(
                             itemCount: listBank.length,
+                            physics: const BouncingScrollPhysics(),
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () {
@@ -195,14 +195,20 @@ class _DepositPageState extends State<DepositPage> {
                                     if (int.parse(depoController.text) >=
                                         10000) {
                                       setState(() {
-                                        asset.asset =
+                                        int jumlah = dana +
                                             int.parse(depoController.text);
+                                        Storages.putDana(jumlah);
                                       });
                                       AwesomeDialog(
                                         context: context,
                                         dialogType: DialogType.success,
                                         animType: AnimType.scale,
                                         title: "BERHASIL DEPOSIT",
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        btnOkText: 'OK',
+                                        dialogBorderRadius:
+                                            BorderRadius.circular(20),
                                         desc:
                                             "Deposit sebesar ${CurrencyFormat.convertToIdr(int.parse(depoController.text))} menggunakan ${listBank[index][1]}",
                                         btnOkOnPress: () {},
@@ -213,9 +219,14 @@ class _DepositPageState extends State<DepositPage> {
                                         context: context,
                                         dialogType: DialogType.error,
                                         animType: AnimType.scale,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20),
                                         title: "GAGAL DEPOSIT",
                                         desc: "Minimal deposit Rp 10.000",
+                                        dialogBorderRadius:
+                                            BorderRadius.circular(20),
                                         btnOkOnPress: () {},
+                                        btnOkText: 'OK',
                                       ).show();
                                     }
                                   } else {
@@ -224,13 +235,19 @@ class _DepositPageState extends State<DepositPage> {
                                         context: context,
                                         dialogType: DialogType.infoReverse,
                                         animType: AnimType.scale,
+                                        btnOkText: 'OK',
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        dialogBorderRadius:
+                                            BorderRadius.circular(20),
                                         desc: "Kamu tidak melakukan pembelian",
                                         btnOkOnPress: () {},
                                       ).show();
-                                    } else if (hargaUpdate < asset.asset) {
+                                    } else if (hargaUpdate < dana) {
                                       setState(() {
                                         List<dynamic> assetList = [];
-                                        asset.asset = -hargaUpdate;
+                                        int jumlah = dana - hargaUpdate;
+                                        Storages.putDana(jumlah);
                                         assetList.add(hargaUpdate.toString());
                                         assetList.add(
                                             "${counter.toString()} ${widget.namaIDR}");
@@ -238,12 +255,17 @@ class _DepositPageState extends State<DepositPage> {
                                         assetList.add(widget.nama);
                                         assetList.add(widget.logoCrypto);
                                         assetList.add(widget.tickerIDCrypto);
-                                        asset.listAssets.add(assetList);
+                                        Storages.putAssets(assetList);
                                       });
                                       AwesomeDialog(
                                         context: context,
                                         dialogType: DialogType.success,
                                         animType: AnimType.scale,
+                                        btnOkText: 'OK',
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        dialogBorderRadius:
+                                            BorderRadius.circular(20),
                                         title: "PEMBELIAN BERHASIL",
                                         desc:
                                             "${widget.title} sebanyak $counter ${widget.namaIDR} \nSebesar ${CurrencyFormat.convertToIdr(hargaUpdate)}",
@@ -255,6 +277,11 @@ class _DepositPageState extends State<DepositPage> {
                                         context: context,
                                         dialogType: DialogType.error,
                                         animType: AnimType.scale,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        btnOkText: 'OK',
+                                        dialogBorderRadius:
+                                            BorderRadius.circular(20),
                                         title: "PEMBELIAN GAGAL",
                                         desc:
                                             "Asset kamu tidak cukup untuk pembelian",

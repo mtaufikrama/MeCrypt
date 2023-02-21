@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
@@ -45,6 +46,20 @@ List<List<String>> listBank = [
   ["ocbc.png", "BANK OCBC"],
 ];
 
+class Storages {
+  static Box dana = Hive.box('dana');
+  static Box wishlist = Hive.box('wishlist');
+  static Box assets = Hive.box('assets');
+  static Future putDana(int value) async => await dana.put('index', value);
+  static int get getDana => dana.get('index') ?? 0;
+  static Future putwishlist(dynamic value) async => await wishlist.add(value);
+  static Map<dynamic, dynamic> get getWishlist =>
+      wishlist.toMap().isNotEmpty ? wishlist.toMap() : {};
+  static Future putAssets(List<dynamic> value) async => await assets.add(value);
+  static Map<dynamic, dynamic> get getAssets =>
+      assets.toMap().isNotEmpty ? assets.toMap() : {};
+}
+
 class MoneyAssets with ChangeNotifier {
   int _asset = 0;
   final List<dynamic> _listCrypto = [];
@@ -52,7 +67,7 @@ class MoneyAssets with ChangeNotifier {
 
   int get asset => _asset;
   set asset(int value) {
-    _asset = _asset + value;
+    _asset += value;
     notifyListeners();
   }
 
@@ -61,6 +76,7 @@ class MoneyAssets with ChangeNotifier {
     _listCrypto.add(index);
     notifyListeners();
   }
+
   List<List<dynamic>> get listAssets => _listAssets;
   set listAssets(List<dynamic> listIndex) {
     _listAssets.add(listIndex);

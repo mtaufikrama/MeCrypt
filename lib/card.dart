@@ -1,4 +1,8 @@
+import 'dart:math';
+
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
+import 'package:mecrypt/alertpage.dart';
 import 'package:mecrypt/service.dart';
 
 class ListCard extends StatelessWidget {
@@ -22,6 +26,7 @@ class ListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final int random = Random().nextInt(400);
     return Row(
       children: [
         Expanded(
@@ -51,26 +56,32 @@ class ListCard extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              title,
-                              style: Style.fontKripto,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            Text(
-                              subtitle,
-                              style: Style.fontAngka,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Hero(
+                                tag: title + random.toString(),
+                                child: Text(
+                                  title,
+                                  style: Style.fontKripto,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              Text(
+                                subtitle,
+                                style: Style.fontAngka,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
                         ),
                         Text(
-                                kananTengah,
-                                style: Style.fontAngka,
-                              )
+                          kananTengah,
+                          style: Style.fontAngka,
+                          overflow: TextOverflow.ellipsis,
+                        )
                       ],
                     ),
                   ),
@@ -82,28 +93,21 @@ class ListCard extends StatelessWidget {
         Expanded(
           flex: 1,
           child: GestureDetector(
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                            bottom: Radius.circular(200),
-                            top: Radius.circular(20))),
-                    title: Text(
-                      title,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 40),
-                    ),
-                    content: Image.network(logoCrypto),
-                  );
-                },
-              );
-            },
-            child: CircleAvatar(
-              backgroundImage: NetworkImage(logoCrypto),
+            onTap: () => context.pushTransparentRoute(
+              AlertPage(
+                name: title,
+                image: logoCrypto,
+                tagImage: logoCrypto + random.toString(),
+                tagName: title + random.toString(),
+              ),
+              transitionDuration: const Duration(milliseconds: 500),
+              reverseTransitionDuration: const Duration(milliseconds: 500),
+            ),
+            child: Hero(
+              tag: logoCrypto + random.toString(),
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(logoCrypto),
+              ),
             ),
           ),
         ),

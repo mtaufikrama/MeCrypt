@@ -5,12 +5,19 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mecrypt/card.dart';
 import 'package:mecrypt/service.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
 
 import 'crypto_page.dart';
 
 class WishList extends StatefulWidget {
-  const WishList({super.key});
+  const WishList({
+    super.key,
+    required this.future24hr,
+    required this.futureTicker,
+    required this.pairsDataCrypto,
+  });
+  final Future<dynamic> future24hr;
+  final Future<dynamic> futureTicker;
+  final Future<List<dynamic>> pairsDataCrypto;
 
   @override
   State<WishList> createState() => _WishListState();
@@ -19,26 +26,26 @@ class WishList extends StatefulWidget {
 class _WishListState extends State<WishList> {
   @override
   Widget build(BuildContext context) {
-    var asset = context.watch<MoneyAssets>();
-    return asset.listCrypto.isNotEmpty
+    Map wishlist = Storages.getWishlist;
+    return wishlist.isNotEmpty
         ? FutureBuilder<List<dynamic>>(
-            future: FutureJson().pairsDataCrypto(),
+            future: widget.pairsDataCrypto,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
                 return Column(
                   children: [
                     ListView.builder(
                       shrinkWrap: true,
-                      itemCount: asset.listCrypto.length,
+                      itemCount: wishlist.length,
                       itemBuilder: (BuildContext context, int index) {
-                        dynamic cryptoList = asset.listCrypto[index];
+                        dynamic cryptoList = wishlist[index];
                         return FutureBuilder<dynamic>(
-                          future: FutureJson().price24hrDataCrypto(),
+                          future: widget.future24hr,
                           builder: (BuildContext context,
                               AsyncSnapshot snapshot24hr) {
                             if (snapshot24hr.hasData) {
                               return FutureBuilder<dynamic>(
-                                future: FutureJson().tickerDataCrypto(),
+                                future: widget.futureTicker,
                                 builder: (BuildContext context,
                                     AsyncSnapshot snapshotlast) {
                                   if (snapshotlast.hasData) {

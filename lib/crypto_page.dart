@@ -1,5 +1,9 @@
+import 'dart:math';
+
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mecrypt/alertpage.dart';
 import 'package:mecrypt/deposit_page.dart';
 
 import 'package:mecrypt/service.dart';
@@ -33,7 +37,7 @@ class _CryptoPageState extends State<CryptoPage> {
   Color? warna7hari = Warna.font;
   Color? warnaTeks7hari = Warna.background;
   Color? warnaTeks24jam = Warna.background;
-
+  int random = Random().nextInt(400);
   String persentase = "nothink";
 
   @override
@@ -42,41 +46,39 @@ class _CryptoPageState extends State<CryptoPage> {
       child: Scaffold(
         appBar: AppBar(
           leading: GestureDetector(
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                            bottom: Radius.circular(200),
-                            top: Radius.circular(20))),
-                    title: Text(
-                      widget.name,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 40),
-                    ),
-                    content: Image.network(
-                      widget.image,
-                    ),
-                  );
-                },
-              );
-            },
+            onTap: () => context.pushTransparentRoute(
+              AlertPage(
+                name: widget.name,
+                image: widget.image,
+                tagImage: widget.image + random.toString(),
+                tagName: widget.name + random.toString(),
+              ),
+              transitionDuration: const Duration(milliseconds: 500),
+              reverseTransitionDuration: const Duration(milliseconds: 500),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(10),
-              child: CircleAvatar(
-                backgroundImage: NetworkImage(widget.image),
+              child: Hero(
+                tag: widget.image + random.toString(),
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: Image.network(widget.image),
+                  ),
+                ),
               ),
             ),
           ),
-          title: Text(
-            widget.name,
-            style: GoogleFonts.jua(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Warna.font,
+          title: Hero(
+            tag: widget.name + random.toString(),
+            child: Text(
+              widget.name,
+              style: GoogleFonts.jua(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Warna.font,
+              ),
             ),
           ),
           backgroundColor: Colors.black,
@@ -102,19 +104,20 @@ class _CryptoPageState extends State<CryptoPage> {
                             if (snapshot7d.hasData) {
                               dynamic dataTicker =
                                   snapshotTicker.data[widget.tickerid];
-                              double persen24hr =
-                                  (double.parse(snapshot24hr.data[widget.id]) -
-                                          double.parse(
-                                            dataTicker["last"],
-                                          )) /
-                                      double.parse(snapshot24hr.data[widget.id]) *
-                                      -100;
-                              double persen7d = (double.parse(snapshot7d.data[widget.id]) -
+                              double persen24hr = (double.parse(
+                                          snapshot24hr.data[widget.id]) -
                                       double.parse(
                                         dataTicker["last"],
                                       )) /
-                                  double.parse(snapshot7d.data[widget.id]) *
+                                  double.parse(snapshot24hr.data[widget.id]) *
                                   -100;
+                              double persen7d =
+                                  (double.parse(snapshot7d.data[widget.id]) -
+                                          double.parse(
+                                            dataTicker["last"],
+                                          )) /
+                                      double.parse(snapshot7d.data[widget.id]) *
+                                      -100;
                               return Column(
                                 children: [
                                   Card(
@@ -182,7 +185,9 @@ class _CryptoPageState extends State<CryptoPage> {
                                                             CurrencyFormat.convertToIdr(
                                                                 double.parse(
                                                                     snapshot24hr
-                                                                        .data[widget.id])),
+                                                                            .data[
+                                                                        widget
+                                                                            .id])),
                                                             style:
                                                                 GoogleFonts.jua(
                                                               color: Warna.card,
@@ -210,11 +215,12 @@ class _CryptoPageState extends State<CryptoPage> {
                                                             ),
                                                           ),
                                                           Text(
-                                                            CurrencyFormat
-                                                                .convertToIdr(
-                                                                    double.parse(
-                                                                        snapshot7d
-                                                                            .data[widget.id])),
+                                                            CurrencyFormat.convertToIdr(
+                                                                double.parse(
+                                                                    snapshot7d
+                                                                            .data[
+                                                                        widget
+                                                                            .id])),
                                                             style:
                                                                 GoogleFonts.jua(
                                                               color: Warna.card,
