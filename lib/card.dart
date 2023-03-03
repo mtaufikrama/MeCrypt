@@ -101,30 +101,33 @@ class ListCard extends StatelessWidget {
         ),
         SizedBox(
           height: 50,
-          child: GestureDetector(
-            onTap: () => context.pushTransparentRoute(
-              ImagePage(
-                name: title,
-                image: logoCrypto,
-                tagImage: logoCrypto + random.toString(),
-                tagName: title + random.toString(),
+          child: AspectRatio(
+            aspectRatio: 1,
+            child: GestureDetector(
+              onTap: () => context.pushTransparentRoute(
+                ImagePage(
+                  name: title,
+                  image: logoCrypto,
+                  tagImage: logoCrypto + random.toString(),
+                  tagName: title + random.toString(),
+                ),
+                transitionDuration: const Duration(milliseconds: 500),
+                reverseTransitionDuration: const Duration(milliseconds: 500),
               ),
-              transitionDuration: const Duration(milliseconds: 500),
-              reverseTransitionDuration: const Duration(milliseconds: 500),
-            ),
-            child: Hero(
-              flightShuttleBuilder: (flightContext, animation, flightDirection,
-                      fromHeroContext, toHeroContext) =>
-                  DefaultTextStyle(
-                style: DefaultTextStyle.of(toHeroContext).style,
-                child: toHeroContext.widget,
-              ),
-              tag: logoCrypto + random.toString(),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(50),
-                child: Image.network(
-                  logoCrypto,
-                  fit: BoxFit.contain,
+              child: Hero(
+                flightShuttleBuilder: (flightContext, animation,
+                        flightDirection, fromHeroContext, toHeroContext) =>
+                    DefaultTextStyle(
+                  style: DefaultTextStyle.of(toHeroContext).style,
+                  child: toHeroContext.widget,
+                ),
+                tag: logoCrypto + random.toString(),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: Image.network(
+                    logoCrypto,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
             ),
