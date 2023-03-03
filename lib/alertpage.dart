@@ -1,8 +1,9 @@
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
+import 'package:mecrypt/service.dart';
 
-class AlertPage extends StatelessWidget {
-  const AlertPage({
+class ImagePage extends StatelessWidget {
+  const ImagePage({
     Key? key,
     required this.name,
     required this.image,
@@ -31,21 +32,32 @@ class AlertPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Hero(
+                flightShuttleBuilder: (flightContext, animation,
+                        flightDirection, fromHeroContext, toHeroContext) =>
+                    DefaultTextStyle(
+                  style: DefaultTextStyle.of(toHeroContext).style,
+                  child: toHeroContext.widget,
+                ),
                 tag: tagName,
                 child: Text(
                   name,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 40,
-                    color: Colors.white,
-                  ),
+                  style: Style.fontDialog,
                 ),
               ),
               Hero(
                 tag: tagImage,
                 child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.8,
+                  width: responsive(
+                    context,
+                    mobile: MediaQuery.of(context).size.width * 0.8,
+                    desktop: null,
+                  ),
+                  height: responsive(
+                    context,
+                    mobile: null,
+                    desktop: MediaQuery.of(context).size.height * 0.8,
+                  ),
                   child: Image.network(
                     image,
                   ),
@@ -54,7 +66,6 @@ class AlertPage extends StatelessWidget {
               IconButton(
                 onPressed: () async {
                   Navigator.of(context).pop();
-                  // await downloadImage(imageUrl);
                 },
                 icon: const Icon(
                   Icons.cancel_outlined,
@@ -64,22 +75,6 @@ class AlertPage extends StatelessWidget {
             ],
           ),
         ),
-        // AlertDialog(
-        //   shape: const RoundedRectangleBorder(
-        //       borderRadius: BorderRadius.vertical(
-        //           bottom: Radius.circular(200), top: Radius.circular(20))),
-        //   title: Text(
-        //     name,
-        //     textAlign: TextAlign.center,
-        //     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
-        //   ),
-        //   content: Hero(
-        //     tag: tag,
-        //     child: Image.network(
-        //       image,
-        //     ),
-        //   ),
-        // ),
       ),
     );
   }

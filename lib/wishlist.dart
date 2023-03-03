@@ -14,10 +14,12 @@ class WishList extends StatefulWidget {
     required this.future24hr,
     required this.futureTicker,
     required this.pairsDataCrypto,
+    required this.future7d,
   });
-  final Future<dynamic> future24hr;
-  final Future<dynamic> futureTicker;
+  final Future<Map<String, dynamic>> future24hr;
+  final Future<Map<String, dynamic>> futureTicker;
   final Future<List<dynamic>> pairsDataCrypto;
+  final Future<Map<String, dynamic>> future7d;
 
   @override
   State<WishList> createState() => _WishListState();
@@ -30,60 +32,70 @@ class _WishListState extends State<WishList> {
     return wishlist.isNotEmpty
         ? FutureBuilder<List<dynamic>>(
             future: widget.pairsDataCrypto,
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (snapshot.hasData) {
+            builder: (context, snapshot) {
+              if (snapshot.hasData &&
+                  snapshot.connectionState != ConnectionState.waiting &&
+                  snapshot.data != null) {
                 return Column(
                   children: [
                     ListView.builder(
                       shrinkWrap: true,
                       itemCount: wishlist.length,
-                      itemBuilder: (BuildContext context, int index) {
+                      itemBuilder: (context, index) {
                         dynamic cryptoList = wishlist[index];
                         return FutureBuilder<dynamic>(
                           future: widget.future24hr,
-                          builder: (BuildContext context,
-                              AsyncSnapshot snapshot24hr) {
-                            if (snapshot24hr.hasData) {
+                          builder: (context, snapshot24hr) {
+                            if (snapshot24hr.hasData &&
+                                snapshot24hr.connectionState !=
+                                    ConnectionState.waiting &&
+                                snapshot24hr.data != null) {
+                              String data24hr = snapshot24hr
+                                      .data[snapshot.data![cryptoList]['id']] ??
+                                  '0';
                               return FutureBuilder<dynamic>(
                                 future: widget.futureTicker,
-                                builder: (BuildContext context,
-                                    AsyncSnapshot snapshotlast) {
-                                  if (snapshotlast.hasData) {
+                                builder: (context, snapshotlast) {
+                                  if (snapshotlast.hasData &&
+                                      snapshotlast.connectionState !=
+                                          ConnectionState.waiting &&
+                                      snapshotlast.data != null) {
                                     double persentase = ((double.parse(
-                                                snapshot24hr.data[snapshot
-                                                    .data[cryptoList]['id']]) -
+                                                snapshot24hr.data[
+                                                    snapshot.data![cryptoList]
+                                                        ['id']] as String) -
                                             double.parse(snapshotlast.data[
-                                                snapshot.data[cryptoList]
-                                                    ['ticker_id']]["last"])) /
-                                        double.parse(
-                                            snapshot24hr.data[snapshot.data[cryptoList]['id']]) *
+                                                snapshot.data![cryptoList]
+                                                    ['ticker_id']]["last"] as String)) /
+                                        double.parse(snapshot24hr.data[snapshot.data![cryptoList]['id']]) *
                                         -100);
-
                                     dynamic namecrypto = snapshotlast.data[
-                                        snapshot.data[cryptoList]
+                                        snapshot.data![cryptoList]
                                             ['ticker_id']]["name"];
                                     dynamic tickerID =
-                                        snapshot.data[cryptoList]['ticker_id'];
+                                        snapshot.data![cryptoList]['ticker_id'];
                                     dynamic idCrypto =
-                                        snapshot.data[cryptoList]['id'];
+                                        snapshot.data![cryptoList]['id'];
                                     double hargaCrypto = double.parse(
-                                      snapshotlast.data[
-                                          snapshot.data[cryptoList]
-                                              ['ticker_id']]["last"],
-                                    );
-                                    dynamic namaIDR = snapshot.data[cryptoList]
+                                        snapshotlast.data[
+                                            snapshot.data![cryptoList]
+                                                ['ticker_id']]["last"]);
+                                    dynamic namaIDR = snapshot.data![cryptoList]
                                         ['traded_currency_unit'];
                                     dynamic logoCrypto = snapshot
-                                        .data[cryptoList]['url_logo_png'];
+                                        .data![cryptoList]['url_logo_png'];
                                     dynamic deskripsi = snapshot
-                                        .data[cryptoList]["description"];
-
+                                        .data![cryptoList]["description"];
                                     return ListCard(
                                         onTap: () {
                                           Navigator.push(
                                             context,
                                             PageTransition(
                                                 child: CryptoPage(
+                                                  future24hr: widget.future24hr,
+                                                  future7d: widget.future7d,
+                                                  futureTicker:
+                                                      widget.futureTicker,
                                                   tickerid: tickerID,
                                                   id: idCrypto,
                                                   namaIDR: namaIDR,

@@ -30,8 +30,7 @@ class ListCard extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          flex: 8,
-          child: GestureDetector(
+          child: InkWell(
             onDoubleTap: onDoubleTap,
             onTap: onTap,
             child: Padding(
@@ -62,6 +61,16 @@ class ListCard extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Hero(
+                                flightShuttleBuilder: (flightContext,
+                                        animation,
+                                        flightDirection,
+                                        fromHeroContext,
+                                        toHeroContext) =>
+                                    DefaultTextStyle(
+                                  style:
+                                      DefaultTextStyle.of(toHeroContext).style,
+                                  child: toHeroContext.widget,
+                                ),
                                 tag: title + random.toString(),
                                 child: Text(
                                   title,
@@ -90,11 +99,11 @@ class ListCard extends StatelessWidget {
             ),
           ),
         ),
-        Expanded(
-          flex: 1,
+        SizedBox(
+          height: 50,
           child: GestureDetector(
             onTap: () => context.pushTransparentRoute(
-              AlertPage(
+              ImagePage(
                 name: title,
                 image: logoCrypto,
                 tagImage: logoCrypto + random.toString(),
@@ -104,9 +113,19 @@ class ListCard extends StatelessWidget {
               reverseTransitionDuration: const Duration(milliseconds: 500),
             ),
             child: Hero(
+              flightShuttleBuilder: (flightContext, animation, flightDirection,
+                      fromHeroContext, toHeroContext) =>
+                  DefaultTextStyle(
+                style: DefaultTextStyle.of(toHeroContext).style,
+                child: toHeroContext.widget,
+              ),
               tag: logoCrypto + random.toString(),
-              child: CircleAvatar(
-                backgroundImage: NetworkImage(logoCrypto),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(50),
+                child: Image.network(
+                  logoCrypto,
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
           ),

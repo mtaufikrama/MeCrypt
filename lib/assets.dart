@@ -10,7 +10,7 @@ class Assets extends StatefulWidget {
     super.key,
     required this.tickerDataCrypto,
   });
-  final Future<dynamic> tickerDataCrypto;
+  final Future<Map<String, dynamic>> tickerDataCrypto;
 
   @override
   State<Assets> createState() => _AssetsState();
@@ -32,45 +32,49 @@ class _AssetsState extends State<Assets> {
               int namaCrypto = 3;
               int logoCrypto = 4;
               int tickerIDCrypto = 5;
-              return FutureBuilder<dynamic>(
-                  future: widget.tickerDataCrypto,
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (snapshot.hasData) {
-                      var persentase =
-                          (double.parse(assetsList[hargaCryptoToday]) -
-                                  double.parse(
-                                      snapshot.data[assetsList[tickerIDCrypto]]
-                                          ["last"])) /
-                              double.parse(assetsList[hargaCryptoToday]) *
-                              -100;
-                      return ListCard(
-                        color: persentase < 0.0
-                            ? Warna.turun
-                            : persentase == 0.0
-                                ? Colors.grey
-                                : Warna.naik,
-                        title: assetsList[namaCrypto],
-                        subtitle:
-                            "${CurrencyFormat.convertToIdr(int.parse(assetsList[hargaCryptoAssets]))}/${assetsList[jumlahCryptoAssets]}",
-                        kananTengah: persentase > 0
-                            ? "+ ${persentase.toStringAsFixed(2)}%"
-                            : persentase == 0
-                                ? "${persentase.abs().toStringAsFixed(0)}%"
-                                : "- ${persentase.abs().toStringAsFixed(2)}%",
-                        logoCrypto: assetsList[logoCrypto],
-                      );
-                    } else {
-                      return Container(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 10),
-                        height: 50,
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.grey),
-                      );
-                    }
-                  });
+              return FutureBuilder<Map<String, dynamic>>(
+                future: widget.tickerDataCrypto,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    var persentase =
+                        (double.parse(assetsList[hargaCryptoToday]) -
+                                double.parse(
+                                    snapshot.data![assetsList[tickerIDCrypto]]
+                                        ["last"])) /
+                            double.parse(assetsList[hargaCryptoToday]) *
+                            -100;
+                    return ListCard(
+                      color: persentase < 0.0
+                          ? Warna.turun
+                          : persentase == 0.0
+                              ? Colors.grey
+                              : Warna.naik,
+                      title: assetsList[namaCrypto],
+                      subtitle:
+                          "${CurrencyFormat.convertToIdr(int.parse(assetsList[hargaCryptoAssets]))}/${assetsList[jumlahCryptoAssets]}",
+                      kananTengah: persentase > 0
+                          ? "+ ${persentase.toStringAsFixed(2)}%"
+                          : persentase == 0
+                              ? "${persentase.abs().toStringAsFixed(0)}%"
+                              : "- ${persentase.abs().toStringAsFixed(2)}%",
+                      logoCrypto: assetsList[logoCrypto],
+                    );
+                  } else {
+                    return Container(
+                      margin: const EdgeInsets.symmetric(
+                        vertical: 5,
+                        horizontal: 10,
+                      ),
+                      height: 50,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.grey,
+                      ),
+                    );
+                  }
+                },
+              );
             },
           )
         : Center(

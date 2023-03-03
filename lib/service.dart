@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
@@ -30,6 +32,8 @@ class Style {
   static TextStyle? fontTeks = GoogleFonts.jua();
   static TextStyle? fontJudul = GoogleFonts.jua(
       fontSize: 25, fontWeight: FontWeight.bold, color: Warna.font);
+  static TextStyle? fontDialog = GoogleFonts.jua(
+      fontSize: 35, fontWeight: FontWeight.bold, color: Warna.font);
 }
 
 List<List<String>> listBank = [
@@ -60,30 +64,65 @@ class Storages {
       assets.toMap().isNotEmpty ? assets.toMap() : {};
 }
 
-class MoneyAssets with ChangeNotifier {
-  int _asset = 0;
-  final List<dynamic> _listCrypto = [];
-  final List<List<dynamic>> _listAssets = [];
+// class MoneyAssets with ChangeNotifier {
+//   int _asset = 0;
+//   final List<dynamic> _listCrypto = [];
+//   final List<List<dynamic>> _listAssets = [];
 
-  int get asset => _asset;
-  set asset(int value) {
-    _asset += value;
-    notifyListeners();
+//   int get asset => _asset;
+//   set asset(int value) {
+//     _asset += value;
+//     notifyListeners();
+//   }
+
+//   List<dynamic> get listCrypto => _listCrypto;
+//   set listCrypto(dynamic index) {
+//     _listCrypto.add(index);
+//     notifyListeners();
+//   }
+
+//   List<List<dynamic>> get listAssets => _listAssets;
+//   set listAssets(List<dynamic> listIndex) {
+//     _listAssets.add(listIndex);
+//     notifyListeners();
+//   }
+
+//   String get assetRp => CurrencyFormat.convertToIdr(_asset);
+// }
+
+responsive(
+  BuildContext context, {
+  required dynamic mobile,
+  required dynamic desktop,
+  dynamic tablet,
+  dynamic iOS,
+  dynamic macOS,
+}) {
+  final String orientation = MediaQuery.of(context).orientation.name;
+  final double width = MediaQuery.of(context).size.width;
+  if (kIsWeb || Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
+    if (width <= 850.toDouble()) {
+      return mobile;
+    } else if (width <= 1100.toDouble()) {
+      return tablet ?? desktop;
+    } else {
+      return desktop;
+    }
+  } else {
+    if (Platform.isAndroid) {
+      if (orientation == 'landscape') {
+        return tablet ?? desktop;
+      } else {
+        return mobile;
+      }
+    } else if (Platform.isIOS) {
+      if (orientation == 'landscape') {
+        return macOS ?? tablet ?? iOS ?? desktop;
+      } else {
+        return iOS ?? mobile;
+      }
+    }
   }
-
-  List<dynamic> get listCrypto => _listCrypto;
-  set listCrypto(dynamic index) {
-    _listCrypto.add(index);
-    notifyListeners();
-  }
-
-  List<List<dynamic>> get listAssets => _listAssets;
-  set listAssets(List<dynamic> listIndex) {
-    _listAssets.add(listIndex);
-    notifyListeners();
-  }
-
-  String get assetRp => CurrencyFormat.convertToIdr(_asset);
 }
 
 class FutureJson {
@@ -95,12 +134,12 @@ class FutureJson {
     return json.decode(response.body);
   }
 
-  Future<dynamic> price24hrDataCrypto() async {
+  Future<Map<String, dynamic>> price24hrDataCrypto() async {
     var response = await http.get(Uri.parse(summariesUrl));
     return json.decode(response.body)["prices_24h"];
   }
 
-  Future<dynamic> tickerDataCrypto() async {
+  Future<Map<String, dynamic>> tickerDataCrypto() async {
     var response = await http.get(Uri.parse(summariesUrl));
     return json.decode(response.body)["tickers"];
   }
@@ -111,7 +150,7 @@ class FutureJson {
     return json.decode(response.body);
   }
 
-  Future<dynamic> price7dDataCrypto() async {
+  Future<Map<String, dynamic>> price7dDataCrypto() async {
     var response = await http.get(Uri.parse(summariesUrl));
     return json.decode(response.body)["prices_7d"];
   }
