@@ -27,26 +27,24 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  awesome_dialog: ^3.0.2
+  cupertino_icons: ^1.0.2
+  dismissible_page: ^1.0.1
+  double_back_to_close: ^2.0.0
   flutter:
     sdk: flutter
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
+  get: ^4.6.5
+  google_fonts: ^3.0.1
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
   http: ^0.13.5
   intl: ^0.17.0
   page_transition: ^2.0.9
-  double_back_to_close: ^2.0.0
-  google_fonts: ^3.0.1
   provider: ^6.0.4
-  awesome_dialog: ^3.0.2
-  dismissible_page: ^1.0.1
-  hive: ^2.2.3
-  hive_flutter: ^1.1.0
+  url_strategy: ^0.2.0
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
+  flutter_launcher_icons: "^0.12.0"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -54,16 +52,28 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
-  flutter_launcher_icons: "^0.10.0"
+  flutter_test:
+    sdk: flutter
 
 flutter_icons:
-  android: "launcher_icon"
+  android: "launch_app"
   ios: true
   image_path: "assets/launcher.jpg"
+  web:
+    generate: true
+    image_path: "assets/launcher.jpg"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "assets/launcher.jpg"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/launcher.jpg"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-
 # The following section is specific to Flutter packages.
 flutter:
 
@@ -77,13 +87,10 @@ flutter:
     - assets/
     - assets/bank/
   #   - images/a_dot_ham.jpeg
-
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
-
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
-
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a

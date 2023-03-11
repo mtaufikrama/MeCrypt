@@ -101,9 +101,9 @@ responsive(
   final String orientation = MediaQuery.of(context).orientation.name;
   final double width = MediaQuery.of(context).size.width;
   if (kIsWeb || Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
-    if (width <= 850.toDouble()) {
+    if (width <= 850.0) {
       return mobile;
-    } else if (width <= 1100.toDouble()) {
+    } else if (width <= 1100.0) {
       return tablet ?? desktop;
     } else {
       return desktop;
