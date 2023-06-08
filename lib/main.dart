@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mecrypt/router.dart';
+import 'package:mecrypt/splash_screen.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 Future<void> main() async {
@@ -25,10 +26,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "MeCrypt",
-      routerConfig: Routes.router,
+      home: SplashScreen(),
     );
   }
 }
